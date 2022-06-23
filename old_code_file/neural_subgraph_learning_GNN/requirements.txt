@@ -1,0 +1,11 @@
+deepsnap == 0.1.2
+matplotlib
+networkx == 2.4
+numpy == 1.13.3
+scikit_learn == 0.21.3
+scipy == 0.19.1
+seaborn == 0.9.0
+torch
+torch_geometric
+test_tube == 0.7.5
+tqdm == 4.43.0
