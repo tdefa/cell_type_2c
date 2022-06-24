@@ -6,6 +6,12 @@
 
 ##### activate your conda env ex: 
 
+####execute the following command in the console in the code directory python main_cluster_split.py --path_to_czi_folder /media/tom/Elements1/to_take/test_pipeline/ --list_folder test1/ test2/ --new_probe Pdgfratest 35 0.42 --new_probe Pdgfratest2 40 0.62  --dico_name_save test_for_hugo --prepare_czi 1 --segmentation 1 --spot_detection 1 --classify 1 --save_plot 1
+
+
+
+# Argument of the commend line 
+
 optional arguments:
   -h, --help            show this help message and exit
   -ptz PATH_TO_CZI_FOLDER, --path_to_czi_folder PATH_TO_CZI_FOLDER
