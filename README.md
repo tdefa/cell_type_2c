@@ -7,7 +7,7 @@
 ##### activate your conda env ex: 
 
 #### execute the following command in the console in the code directory it will compute all the mapping and images
-python main_cluster_split.py --path_to_czi_folder /media/tom/Elements1/to_take/test_pipeline/ --list_folder test1/ test2/ --new_probe Pdgfratest 35 0.42 --new_probe Pdgfratest2 40 0.62  --dico_name_save test_for_hugo --prepare_czi 1 --segmentation 1 --spot_detection 1 --classify 1 --save_plot 1
+python main_cluster_split.py --path_to_czi_folder /media/tom/Elements1/to_take/test_pipeline/ --list_folder test1/ test2/ --new_probe Pdgfratest 35 0.42 --new_probe Pdgfratest2 40 0.62  --dico_name_save test_for_hugo    --manual_threshold_cy3 {"02_NI1230_Lamp3-Cy5_Pdgfra-Cy3_08.tiff": 8, "01_IR5M1236_Lamp3-Cy5_Pdgfra-Cy5_04.tiff": 7} --prepare_czi 1 --segmentation 1 --spot_detection 1 --classify 1 --save_plot 1
 
 ### generate the exels files for one cell type use the following command
 
