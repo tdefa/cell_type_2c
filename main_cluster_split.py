@@ -3,6 +3,8 @@
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+
+
 """
 
 Created on Wed Mar 31 11:27:43 2021
@@ -36,7 +38,7 @@ import warnings
 import re
 import gc
 from tqdm import  tqdm
-
+import json
 warnings.filterwarnings("ignore")
 
 
@@ -44,11 +46,10 @@ warnings.filterwarnings("ignore")
 
 
 def main(list_folder, args):
-    dico_cy3 = {"02_NI1230_Lamp3-Cy5_Pdgfra-Cy3_04.tiff": 45}
-    dico_cy5 = {"02_NI1230_Lamp3-Cy5_Pdgfra-Cy3_08.tiff": 8,
-                "01_IR5M1236_Lamp3-Cy5_Pdgfra-Cy5_04.tiff": 7,
-                "05_IR5M1250_Lamp3-Cy5_Pdgfra-Cy3_mid_08.tiff": 9,
-                "05_IR5M1250_Lamp3-Cy5_Pdgfra-Cy3_mid_01.tiff": 9, }
+    dico_cy3 = json.loads(args.manual_threshold_cy3)
+    dico_cy5 = json.loads(args.manual_threshold_cy5)
+
+    print(f"manual threshold {dico_cy3} {dico_cy5} ")
 
     dico_param_probes = {"Lamp3": (32, 0.42),
                          "Pdgfra": (35, 0.42),
@@ -70,7 +71,7 @@ def main(list_folder, args):
                          }
 
     for new_probe in args.new_probe:
-        dico_param_probes[new_probe[0]] = (int(new_probe[1]), float(new_probe[1]))
+        dico_param_probes[new_probe[0]] = (int(new_probe[1]), float(new_probe[2]))
 
     print(f'list of probe names you can use {list(dico_param_probes.keys())}')
 
@@ -153,6 +154,9 @@ def main(list_folder, args):
                                                            threshold_input=dico_cy3,
                                                            output_file=path_to_project_c + "detected_spot_3d" + "/", )
             np.save(path_to_project_c + 'dico_threshold_AF568.npy', dico_threshold)
+            with open(path_to_project_c + 'dico_threshold_AF568.txt', 'w') as f:
+                f.write(str(dico_threshold))
+
             print(dico_threshold)
             dico_threshold = spot_detection_for_clustering(sigma=(1.35, 1.35, 1.35),
                                                            rna_path=[path_to_af647 + 'AF647_'],
@@ -160,6 +164,9 @@ def main(list_folder, args):
                                                            threshold_input=dico_cy5,
                                                            output_file=path_to_project_c + "detected_spot_3d" + "/", )
             np.save(path_to_project_c + 'dico_threshold_AF647.npy', dico_threshold)
+            with open(path_to_project_c + 'dico_threshold_AF647.txt', 'w') as f:
+                f.write(str(dico_threshold))
+
             print(dico_threshold)
 
         if args.classify:
@@ -672,7 +679,7 @@ def main(list_folder, args):
 
                     fig.savefig(path_to_save_fig + folder + "convex_hull/Cy3_Cy5_convexhull" + f[:-5])
 
-                plt.show()
+                #plt.show()
                 print("ok")
 
                 #plt.pause(0.5)
@@ -741,20 +748,25 @@ if __name__ == '__main__':
     parser.add_argument('-ptz', "--path_to_czi_folder",
                         type=str,
                         default="/media/tom/Elements1/to_take/",
-                        help='path_to_czi folder')
+                        help='path to the folder containing the czi')
 
-    parser.add_argument( '--new_probe', type=str, nargs='+', action='append', default = [])
 
-    parser.add_argument( '--manual_threshold_cy3', type=str, nargs='+', action='append', default = [])
-    parser.add_argument( '--manual_threshold_cy5', type=str, nargs='+', action='append', default = [])
+    parser.add_argument("--list_folder", nargs="+", default=list_folder,  help=' list of folders in the czi folders to analyse') #
 
+
+    parser.add_argument( '--new_probe', type=str, nargs='+', action='append', default = [],
+                         help =" command to add new probes or change parameters of existing one to add it do  --new_probe p1 epsi overlapping  --new_probe p2 20 0.3 where  'epsi' is the parameter of the dbscan 'overlapping' is the percent of overlap to make a cell positive to a probe")
+
+
+    parser.add_argument( '--manual_threshold_cy3', type=str, default = '{"02_NI1230_Lamp3-Cy5_Pdgfra-Cy3_04.tiff": 45}',
+                         help = ' write a json like the : {"02_NI1230_Lamp3-Cy5_Pdgfra-Cy3_08.tiff": 8, "01_IR5M1236_Lamp3-Cy5_Pdgfra-Cy5_04.tiff": 7} to set manually the rna spot detection threshold ' )
+    parser.add_argument( '--manual_threshold_cy5', type=str,  default = '{"02_NI1230_Lamp3-Cy5_Pdgfra-Cy3_08.tiff": 8, "01_IR5M1236_Lamp3-Cy5_Pdgfra-Cy5_04.tiff": 7}')
     e = datetime.datetime.now()
 
     parser.add_argument('-dns', "--dico_name_save", type=str,
                         default="dico_080222",  #f"{e.day}_{e.month}_{e.hour}",
-                        help='path_to_project')
+                        help='additional name in the save result')
 
-    parser.add_argument("--list_folder", nargs="+", default=list_folder,  help='') #
 
     ###cellpose arg
     parser.add_argument('-d', "--diameter", type=float, default=None, help='')
@@ -766,11 +778,11 @@ if __name__ == '__main__':
 
 
     ### task to do
-    parser.add_argument('-prczi', "--prepare_czi", type=int, default=0, help='')
-    parser.add_argument('-sg', "--segmentation", type=int, default=0, help='')
-    parser.add_argument("--spot_detection", type=int, default=0, help='')
-    parser.add_argument("--classify", type=int, default=0, help='')
-    parser.add_argument("--save_plot", type=int, default=1, help='')
+    parser.add_argument('-prczi', "--prepare_czi", type=int, default=0, help='do : prepare_czi to tiff ')
+    parser.add_argument('-sg', "--segmentation", type=int, default=0, help='do segmentation ')
+    parser.add_argument("--spot_detection", type=int, default=0, help='do spots detection ')
+    parser.add_argument("--classify", type=int, default=0, help='do classification / cell type mapping')
+    parser.add_argument("--save_plot", type=int, default=1, help=' do save plot')
 
 
     # not used parser.add_argument("--clustering", type=int, default=0, help='')
@@ -785,7 +797,7 @@ if __name__ == '__main__':
     parser.add_argument("--overlapping_cy5", default="e", help='')
 
     parser.add_argument("--remove_overlaping", type=int, default=1, help='')
-    parser.add_argument("--gpu", type=int, default=1, help='')
+    parser.add_argument("--gpu", type=int, default=0, help='')
 
     parser.add_argument("--kk_568", type=int, default=3)
     parser.add_argument("--kk_647", type=int, default=3)

@@ -64,7 +64,8 @@ if __name__ == "__main__":
     parser.add_argument("--dico_stat_name", type=str,
                         default="dico_seg1005.npy",
                         help="key world that is contain in name of the result file.")
-
+    parser.add_argument("--port", default=39949)
+    parser.add_argument("--mode", default='client')
     args = parser.parse_args()
 
     generate_exels_one_cell(list_folder=args.list_folder,

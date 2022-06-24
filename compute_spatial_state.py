@@ -905,7 +905,6 @@ if __name__ == '__main__':
         #"210205_Prolicence/gCap senes/", #dico_stat_2810.npy
         #"210205_Prolicence/aCap prolif/",#dico_stat_2810.npy
         #"210205_Prolicence/aCap senes/", #dico_stat_2810.npy
-
         #"220218_IR3M17gy/",
         #"220317_IR3M10gy_2346_A/",
         #"220318_IR3M10gy_2346_C/",
@@ -917,27 +916,49 @@ if __name__ == '__main__':
         #"220324_IR3M17gy_2351_A/",
         #"220422_IR3M10gy_2345_A/",
         #"220429_fibro_gcap_A/",
-        "220503_fibro_gcap_C/",
-        "220505_fibro_gcap_D/",
-        "220506_fibro_gcap_E/",
-
+        #"220503_fibro_gcap_C/",
+        #"220505_fibro_gcap_D/",
+        #"220506_fibro_gcap_E/",
+        "test1/"
     ]
 
-    path_to_take = "/media/tom/Transcend/image_lustra0605/Images_200522/"
+    parser = argparse.ArgumentParser(description='test')
 
-    list_probes  = [ ['Lamp3'],  ['Pecam1'],  ['Ptprb'],['Hhip'], ["Rtkn2"],
+
+    parser.add_argument("--path_save",
+                        type=str,
+                        default="/media/tom/Elements1/to_take/test_pipeline/exels/",
+                        help='path to save the exels')
+
+    parser.add_argument("--path_folder_of_folders",
+                        type=str,
+                        default="/media/tom/Elements1/to_take/test_pipeline/",
+                        help='path to save the exels')
+
+
+    parser.add_argument("--list_folder", nargs="+", default=list_folder,  help=' list of folders in the czi folders to analyse') #
+
+
+    parser.add_argument('--list_probes', type=str, nargs='+', action='append', default=[ ['Lamp3'],  ['Pecam1'],  ['Ptprb'],['Hhip'], ["Rtkn2"],
                  ['Apln'], ['Chil3'],  ['Fibin'], ['C3ar1'],
-                  ['Mki67'],  ['Cap', 'aCap', 'CEC', 'acap'],]
+                  ['Mki67'],  ['Cap', 'aCap', 'CEC', 'acap'],])
 
+    parser.add_argument("--dico_stat_name",
+                        type=str,
+                        default="finaltest_for_hugo.npy",
+                        help='path to save the exels')
+    parser.add_argument("--port", default=39949)
+    parser.add_argument("--mode", default='client')
 
-    path_save = "/media/tom/Transcend/image_lustra0605/Images_200522/oneexels/"
+    args = parser.parse_args()
+    print(args)
 
-    for probes in list_probes:
-        generate_exels_one_cell(list_folder =list_folder,
-                            gene_smfish = probes,
-                            path_to_take = path_to_take,
-                            path_save = "/media/tom/Transcend/image_lustra0605/Images_200522/oneexels/",
-                            dico_stat_name = "finaldico_seg2205.npy",
+    for probes in args.list_probes:
+        generate_exels_one_cell(list_folder =args.list_folder,
+                            gene_smfish =probes,
+                            path_to_take = args.path_folder_of_folders,
+                            path_save = args.path_save,
+                            dico_stat_name = args.dico_stat_name,
                             compute_nuclei_size = False,
                             nuclei_shape_index = False,
                             compute_neighbor = False)
@@ -945,7 +966,7 @@ if __name__ == '__main__':
 
 #%% pair
 
-
+    """
     list_folder = [
        # "220218_IR3M17gy/",
         #"220317_IR3M10gy_2346_A/",
@@ -1037,3 +1058,4 @@ if __name__ == '__main__':
     for probes in list_probes:
         list_param = [list_folder, probes[0], probes[1], path_to_take, path_save, dico_stat]
         generate_exels_cell_state_type(list_param)
+    """
