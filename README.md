@@ -6,7 +6,8 @@
 
 ##### activate your conda env ex: 
 
-####execute the following command in the console in the code directory python main_cluster_split.py --path_to_czi_folder /media/tom/Elements1/to_take/test_pipeline/ --list_folder test1/ test2/ --new_probe Pdgfratest 35 0.42 --new_probe Pdgfratest2 40 0.62  --dico_name_save test_for_hugo --prepare_czi 1 --segmentation 1 --spot_detection 1 --classify 1 --save_plot 1
+#### execute the following command in the console in the code directory it will compute all the mapping and images
+python main_cluster_split.py --path_to_czi_folder /media/tom/Elements1/to_take/test_pipeline/ --list_folder test1/ test2/ --new_probe Pdgfratest 35 0.42 --new_probe Pdgfratest2 40 0.62  --dico_name_save test_for_hugo --prepare_czi 1 --segmentation 1 --spot_detection 1 --classify 1 --save_plot 1
 
 
 
@@ -39,13 +40,13 @@ optional arguments:
 
   
   
-                        do : prepare_czi to tiff
+   --prepare_czi    do : prepare_czi to tiff 1 , do not 0
   -sg SEGMENTATION, --segmentation SEGMENTATION
-                        do segmentation
+                        do segmentation 1 , do not 0
   --spot_detection SPOT_DETECTION
-                        do spots detection
-  --classify CLASSIFY   do classification / cell type mapping
-  --save_plot SAVE_PLOT do save plot
+                        do spots detection 1 , do not 0
+  --classify CLASSIFY   do classification / cell type mapping 1 , do not 0
+  --save_plot SAVE_PLOT do save plot 1 , do not 0
 
 
 
