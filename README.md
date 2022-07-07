@@ -1,10 +1,11 @@
 
 
-# All the usefull function and the pipeline is in main_cluster_split
 
-# to run it:
 
-# create your conda from the file ENV.txt: 
+#### Module to infer the cell type using smFISH data with two channel of two different marker genes. All the usefull functions and the pipeline is in main_cluster_split
+
+
+#### create your conda from the file ENV.txt: 
 conda list --explicit>ENV.txt
 
 #### execute the following command in the console in the code directory it will compute all the mapping and images. Replace by the parameter by your configuration.  run  python main_cluster_split.py --help for more information
